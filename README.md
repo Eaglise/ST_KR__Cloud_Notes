@@ -26,6 +26,7 @@
 
 
 ## Полезные команды:
+
 - Айпи в локальной сети: arp -a
 - Сгенерировать proto: 
 - python -m grpc_tools.protoc --proto_path=./gRPC/protos --python_out=./gRPC/ --grpc_python_out=./gRPC/ ./gRPC/protos/minio.proto
