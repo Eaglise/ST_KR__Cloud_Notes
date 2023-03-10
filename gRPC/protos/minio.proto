@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package minio_proto;
+
+service MinioMethods {
+    rpc GetList(User) returns (stream NoteResponse) {}
+    rpc AddNote(NoteRequest) returns (Status) {}
+    rpc EditNote(NoteRequest) returns (Status) {}
+    rpc DeleteNote(NoteTitle) returns (Status) {}
+    rpc AddUser(User) returns (Status) {}
+    rpc GetDate(NoteTitle) returns (NoteDate) {}
+}
+
+message NoteRequest {
+    string user = 1;
+    string title = 2;
+    optional string content = 3;
+}
+
+message NoteResponse {
+    string user = 1;
+    string title = 2;
+    string content = 3;
+    string date = 4;
+}
+
+message User {
+    string user = 1;
+}
+
+message Status {
+    bool status = 1;
+    optional string error_message = 2;
+}
+
+message NoteTitle {
+    string user = 1;
+    string title = 2;
+}
+
+message NoteDate {
+    string date = 1;
+}
