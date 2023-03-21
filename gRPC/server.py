@@ -4,30 +4,43 @@ import logging
 import grpc
 import minio_pb2
 import minio_pb2_grpc
-import MinIO.s3_methods
+from MinIO.s3_methods import MinioClass
 
 
 class MinioServicer(minio_pb2_grpc.MinioMethodsServicer):
 
-    # def __init__(self):
-        # self.db = route_guide_resources.read_route_guide_database()
+    def __init__(self):
+        try:
+            self.minio = MinioClass()
+        except ConnectionError:
+            print('Minio connection failed')
+        except Exception:
+            print('Unknown error')
+        else:
+            print('Minio connection succeed')
 
     def GetList(self, request, context):
         print('New request: Get List')
-        note = minio_pb2.Note(
-            user='user1',
-            title='title1',
-            date='date1',
-            content='content1'
-        )
         note_list = []
-        note_list.append(note)
+        note = self.minio.get_note(request.user, 'title1')
+        note_pb = minio_pb2.NoteResponse(user=request.user, title='title1', content=note, date='date')
+        note_list.append(note_pb)
         for n in note_list:
             yield n
 
     def AddNote(self, request, context):
         print('New request: Add Note')
-        return minio_pb2.Status(status='ok')
+        try:
+            self.minio.add_note(request.user, request.title, request.content)
+        except ValueError:
+            status = minio_pb2.Status(status=False, error_message='Minio note add failed')
+        except ConnectionError:
+            status = minio_pb2.Status(status=False, error_message='Unknown minio error')
+        except Exception:
+            status = minio_pb2.Status(status=False, error_message='Unknown grpc error')
+        else:
+            status = minio_pb2.Status(status=True)
+        return status
 
     def EditNote(self, request, context):
         print('New request: Edit Note')
@@ -39,7 +52,17 @@ class MinioServicer(minio_pb2_grpc.MinioMethodsServicer):
 
     def AddUser(self, request, context):
         print('New request: Add User')
-        return minio_pb2.Status(status='ok')
+        try:
+            self.minio.add_user(request.user)
+        except ValueError:
+            status = minio_pb2.Status(status=False, error_message='Minio user add failed (Probably this username already taken)')
+        except ConnectionError:
+            status = minio_pb2.Status(status=False, error_message='Unknown minio error')
+        except Exception:
+            status = minio_pb2.Status(status=False, error_message='Unknown grpc error')
+        else:
+            status = minio_pb2.Status(status=True)
+        return status
 
     def GetDate(self, request, context):
         print('New request: Get Date')
@@ -54,6 +77,7 @@ def serve():
     server.add_insecure_port('0.0.0.0:30000')
     server.start()
     print('gRPC Server started successfully')
+
     server.wait_for_termination()
 
 
