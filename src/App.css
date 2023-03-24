@@ -1,0 +1,322 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@font-face {
+  font-family: GenshinFont;
+  src: url('images/Genshin-Impact-Font/zh-cn.ttf');
+}
+@font-face {
+  font-family: NunitoSansExtraLightFont;
+  src: url('images/Nunito_Sans/NunitoSans-ExtraLight.ttf');
+}
+@font-face {
+  font-family: NunitoSansBoldFont;
+  src: url('images/Nunito_Sans/NunitoSans-Bold.ttf');
+}
+body{
+  background-color: #251F36;
+  background-image: url("images/clouds2B.jpg");
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+
+.typicalText, .welcomeText{
+  color: #A09DA6;
+  font-family: NunitoSansExtraLightFont;
+
+}
+.background{
+   width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  background-color: #251F36;
+}
+.parent{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: auto;
+}
+
+.block, .block1, .block2,.block3{
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
+
+.block1{
+  background-color: rgba(17,10,35,0.3);
+  border-radius: 20px;
+  padding: 40px 20px;
+  margin-top: 100px;
+  width:310px;
+  height: 350px;
+}
+
+.logo-title{
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  /*padding: 40px 20px;*/
+  margin-top: 10px;
+  width: 400px;
+  display: flex;
+}
+.logoImg{
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  margin-right: 20px;
+
+}
+.mainTitle{
+  color: white;
+  font-size: 40px;
+  font-family: GenshinFont;
+  /*text-align: center;*/
+
+  -webkit-text-stroke-width: 2.1px;
+  -webkit-text-stroke-color: rgba(94, 65, 147, 0.53);
+
+  display: inline-block;
+
+}
+
+.welcomeText{
+  margin-top: 50px;
+  font-size: xx-large;
+  text-align: center;
+}
+
+.enterButton{
+  margin: 50px 30px;
+  padding: 20px 100px;
+  font-family: GenshinFont;
+  font-weight: bolder;
+  font-size: 20px;
+  border-radius: 26px;
+  background-color: #80769B;
+}
+
+.form-group{
+  /*margin-top: 20px;*/
+  margin-left: 48px;
+  margin-bottom: 20px;
+}
+.input_label{
+  color:white;
+  font-family: NunitoSansBoldFont;
+  display: block;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.input_field{
+  width: 200px;
+  height: 50px;
+  border-radius: 14px;
+  border: 0px;
+  background-color: #EAE1B6;
+
+  font-family: GenshinFont;
+  font-size: 15px;
+  padding-left: 14px;
+}
+
+.block2{
+  background-color: rgba(17,10,35,0.3);
+  border-radius: 20px;
+  padding: 40px 20px;
+  margin-top: 100px;
+  width:310px;
+  height: 350px;
+
+}
+
+.enterButton1{
+  width: 200px;
+  height: 60px;
+  margin-top: 20px;
+  margin-left: 56px;
+  font-family: GenshinFont;
+  /*font-weight: bolder;*/
+  font-size: 20px;
+  border-radius: 26px;
+  background-color: #EAE1B6;
+}
+
+
+.no-account{
+  margin:100px;
+  color: white;
+  text-decoration: none;
+
+}
+
+.block3{
+  background-color: rgba(17,10,35,0.3);
+  border-radius: 20px;
+  padding: 40px 20px;
+  margin-top: 100px;
+  width:310px;
+  height: 400px;
+
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.column1,.column3{
+  width: 25%;
+  background-color: rgb(31,28,41,0.49);
+}
+.column2{
+  width:50%;
+}
+
+.exitButton,.createButton{
+  width: 100%;
+  height: 70px;
+  font-family: NunitoSansBoldFont;
+  font-size: 30px;
+}
+.exitButton{
+  background-color: #A76E6B;
+  border: #9E4742 1px solid;
+  color: #4F2B29;
+}
+.createButton{
+  background-color: #659E6C;
+  border: #4D9855 1px solid;
+  color: #203D23;
+}
+.saveButton{
+  background-color: #251F36;
+  background-image: url("images/save-file-icon-3.jpg");
+  background-size: 60px;
+  width: 60px;
+  height: 60px;
+  margin-top: 35px;
+  margin-right: 20px;
+  border: none;
+}
+.deleteButton{
+  background-color: #78211C;
+  border: #330F0D 1px solid;
+  color: #330F0D;
+  width: 70px;
+  height: 70px;
+}
+.hello-user{
+  font-family: NunitoSansBoldFont;
+  color: #B3A7D0;
+  font-size: 24px;
+  margin: 60px 50px;
+    word-wrap: break-word;
+
+}
+
+.about-project{
+  font-family: NunitoSansExtraLighFont;
+  color: #B3A7D0;
+  font-size: 24px;
+  padding: 40px 50px;
+  border-top: 1px solid #B3A7D0;
+  word-wrap: break-word;
+  font-weight: lighter;
+}
+
+.title_input{
+  width: 378px;
+  height: 50px;
+  border-radius: 2px;
+  border: 0px;
+  background-color: #D9D9D9;
+
+  font-family: GenshinFont;
+  font-size: 15px;
+  padding-left: 14px;
+}
+.col2-inputWrapper{
+  margin-top:80px;
+  margin-left: 40px;
+}
+
+.text_input{
+  width: 500px;
+  height: 300px;
+  border-radius: 2px;
+  border: 0px;
+  background-color: #D9D9D9;
+
+  font-family: GenshinFont;
+  font-size: 15px;
+  padding-left: 14px;
+}
+
+.noteWrapper{
+  display: flex;
+}
+.noteName{
+  color: white;
+  font-size: 20px;
+  font-family: NunitoSansExtraLighFont;
+  /*width: 100%;*/
+  width: 200px;
+  padding: 20px 40px;
+  border: 1px solid #110A23;
+
+}
+.noteDate{
+  font-size: 10px;
+  top:0;
+  overflow: auto;
+}
