@@ -50,9 +50,14 @@
 }
 body{
   background-color: #251F36;
-  background-image: url("images/clouds2B.jpg");
-  background-repeat: no-repeat;
-  background-size: auto;
+  /*background-image: url("images/clouds2B.jpg")*/
+  /*background-repeat: no-repeat;*/
+  /*background-size: auto;*/
+  background:url("images/clouds2B.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;;
 }
 
 
@@ -138,7 +143,7 @@ body{
 .enterButton{
   margin: 50px 30px;
   padding: 20px 100px;
-  font-family: GenshinFont;
+  /*font-family: GenshinFont;*/
   font-weight: bolder;
   font-size: 20px;
   border-radius: 26px;

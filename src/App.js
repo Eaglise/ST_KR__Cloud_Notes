@@ -6,24 +6,28 @@ import MainTitle from "./components/MainTitle";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";
+import {Container, CssBaseline, Paper, Typography} from "@mui/material";
 
 function App() {
   return (
-      <DocumentTitle title={'Notes'}>
+      // <DocumentTitle title={'Notes'}>
         <BrowserRouter basename="/" >
-            <div>
+            <Container>
+                <CssBaseline/>
                 <MainTitle/>
+
                 <Routes>
                     <Route exact path={'/'} element={<UnauthorizedPage/>}/>
                     <Route exact path={'/login'} element={<LoginPage/>}/>
                     <Route exact path={'/register'} element={<RegisterPage/>}/>
-                    <Route exact path={'/notes'} element={<MainPage/>}/>
+                    {/*<Route exact path={'/notes'} element={<MainPage/>}/>*/}
                 </Routes>
-            </div>
+
+            </Container>
 
 
         </BrowserRouter>
-      </DocumentTitle>
+      // </DocumentTitle>
   );
 }
 
