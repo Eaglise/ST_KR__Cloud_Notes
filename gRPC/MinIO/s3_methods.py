@@ -4,7 +4,7 @@ from config import Config
 
 from gRPC.MinIO.file_processing_methods import *
 
-class MinioClass:
+class MinioClass: # слелать на юзера проверку через бакет экзистс
     def __init__(self):
         try:
             self.config = Config('/Users/artisia/PycharmProjects/ST_KR_Integration/gRPC/MinIO/minio_admin.cfg')
