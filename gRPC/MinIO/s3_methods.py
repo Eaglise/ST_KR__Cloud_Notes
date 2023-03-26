@@ -1,13 +1,13 @@
 from minio import Minio
 from minio.error import S3Error
-import config
-import io
+from config import Config
+
 from gRPC.MinIO.file_processing_methods import *
 
 class MinioClass:
     def __init__(self):
         try:
-            self.config = config.Config('/Users/artisia/PycharmProjects/ST_KR_Integration/gRPC/MinIO/minio_admin.cfg')
+            self.config = Config('/Users/artisia/PycharmProjects/ST_KR_Integration/gRPC/MinIO/minio_admin.cfg')
             self.con = Minio(endpoint=self.config['socket'],
                              access_key=self.config['access_key'],
                              secret_key=self.config['secret_key'],
@@ -53,7 +53,6 @@ class MinioClass:
         try:
             result = self.con.get_object(bucket_name=username,
                                          object_name=title)
-
             return result.data
         except S3Error as exc:
             print("error occurred: ", exc)
