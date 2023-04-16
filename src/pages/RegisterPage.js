@@ -12,6 +12,7 @@ import {
     InputLabel, InputAdornment,
 
 } from "@mui/material";
+import MainTitle from "../components/MainTitle";
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -29,13 +30,15 @@ function RegisterPage() {
     };
 
     return(
+        <>
+            <MainTitle/>
         <Container  component="main" maxWidth="xs" sx={{backgroundColor:'secondary.semitransparent',
         borderRadius:'20px'
         }}>
 
         <Box
             sx={{
-                marginTop: 8,
+                marginTop: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -143,6 +146,7 @@ function RegisterPage() {
         </Box>
 
         </Container>
+        </>
     )
 
 }

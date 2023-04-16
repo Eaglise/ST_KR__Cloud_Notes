@@ -14,6 +14,7 @@ import {
 
 } from "@mui/material";
 import {Label} from "@mui/icons-material";
+import MainTitle from "../components/MainTitle";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -30,14 +31,15 @@ function LoginPage() {
     };
 
     return(
-
+    <>
+        <MainTitle/>
         <Container  component="main" maxWidth="xs" sx={{backgroundColor:'secondary.semitransparent',
         borderRadius:'20px'
         }}>
 
         <Box
             sx={{
-                marginTop: 8,
+                marginTop: 4,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -131,6 +133,7 @@ function LoginPage() {
         </Box>
 
         </Container>
+    </>
     )
 
 }

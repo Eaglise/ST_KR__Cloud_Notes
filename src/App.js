@@ -12,15 +12,18 @@ function App() {
   return (
       // <DocumentTitle title={'Notes'}>
         <BrowserRouter basename="/" >
-            <Container>
-                <CssBaseline/>
-                <MainTitle/>
+            <Container
+                maxWidth={false} disableGutters
+                // sx={{width:'100%',border:"2px solid gray"}}
+            >
+
+                {/*<MainTitle/>*/}
 
                 <Routes>
                     <Route exact path={'/'} element={<UnauthorizedPage/>}/>
                     <Route exact path={'/login'} element={<LoginPage/>}/>
                     <Route exact path={'/register'} element={<RegisterPage/>}/>
-                    {/*<Route exact path={'/notes'} element={<MainPage/>}/>*/}
+                    <Route exact path={'/notes'} element={<MainPage/>}/>
                 </Routes>
 
             </Container>

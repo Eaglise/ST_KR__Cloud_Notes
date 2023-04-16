@@ -1,18 +1,35 @@
-import {Button} from "react-bootstrap";
+import {Button, Container, Grid, Box, Paper, Typography} from "@mui/material";
 
 
-function Note() {
+function Note(item) {
+    let backgroundColor='primary.main'
     return(
-            <div className={'noteWrapper'}>
-                <div>
 
-                    <div className={'noteName'}>
-                        <div className={'noteDate'}>13.03.2023 01:28</div>
-                        Заметка</div>
+        <Box sx={{ display: 'flex' }}>
+            <Paper elevation={2} sx={{width:'80%', borderRadius:'1px', borderBottom:'1px solid',
+                borderLeft:'1px solid', borderColor:'secondary.main',
+                backgroundColor:backgroundColor}}>
+                <Typography sx={{fontSize:'10px', marginTop:'10px', marginLeft:'20px', color:'button.add.main'}}>
+                    {item.date}
+                </Typography>
+                <Typography sx={{marginLeft:'10px', color:'text.text1'}}>
+                    {item.title}
+                </Typography>
+            </Paper>
+            <Button variant={"contained"}
+                    sx={{backgroundColor:'button.exit.main', color:'button.exit.text',
+                        width:'20%', borderRadius:'0px', height:'70px', fontSize:'14px',
+                        borderLeft:'1px solid',borderRight:'1px solid',borderBottom:'1px solid ', borderColor:'button.exit.text',
 
-                </div>
-                <Button className={'deleteButton'}>X</Button>
-            </div>
+                    ":hover":{
+                        backgroundColor:'button.exit.border',
+                    }
+                    }}
+                    >
+                            X
+            </Button>
+
+        </Box>
     )
 }
 

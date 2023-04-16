@@ -1,15 +1,18 @@
-import {Link, redirect} from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import {Container, Typography, Button, Grid, Box} from "@mui/material";
+import MainTitle from "../components/MainTitle";
 function UnauthorizedPage() {
     const navigate = useNavigate();
     function handleClick() {
         navigate('/login');
     }
     return(
+        <>
+            <MainTitle/>
         <Container maxWidth={'sm'}
-        sx={{backgroundColor:'secondary.semitransparent', marginY:'90px', paddingY: '40px', width:'400px', borderRadius: '20px'}}
+        sx={{backgroundColor:'secondary.semitransparent', marginTop:4, paddingY: '40px', width:'400px', borderRadius: '20px'}}
         >
+
             <Grid
               container
               direction="column"
@@ -26,6 +29,7 @@ function UnauthorizedPage() {
             >Вход</Button>
             </Grid>
         </Container>
+            </>
     )
 
 }

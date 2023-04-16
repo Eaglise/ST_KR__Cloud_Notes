@@ -1,20 +1,60 @@
-import {Button} from "react-bootstrap";
+import {Button, Container, Grid, Typography} from "@mui/material";
 
 
 function Column1() {
     return(
-        <div className={'column1'} >
-                    <Button className={'exitButton'}>Выйти</Button>
 
-                    <div className={'hello-user'}>Здраствуйте, User_Nickname_!</div>
-                    <div className={'hello-user'}>У Вас Х заметок.</div>
-                    <div className={'about-project'}>
+        <Grid element
+              xs={3} md={3}
+        sx={{backgroundColor:'secondary.semitransparent1', borderRight:'1px solid', borderColor:'primary.dark'}}
+
+        >
+            <Grid container columns={1} >
+
+                <Grid element xs={12}>
+                    <Button variant={"contained"}
+                    sx={{backgroundColor:'button.exit.main', color:'button.exit.text',
+                        width:'100%', borderRadius:'0px', height:'13vh', fontSize:'20px',
+                    ":hover":{
+                        backgroundColor:'button.exit.border',
+                    }
+                    }}
+                    >
+                            Выйти
+                    </Button>
+                </Grid>
+                <Grid element
+                sx={{marginY:'20px'}}
+                >
+                    <Typography paragraph
+                    sx={{color:'text.text1'}}  align={'center'}
+                    >
+                        Здравствуйте, _InsertUserName_!
+                    </Typography>
+                </Grid>
+                <Grid element
+                sx={{marginY:'20px'}}
+                >
+                    <Typography paragraph
+                    sx={{color:'text.text1'}}  align={'center'}
+                    >
+                        У Вас N заметок.
+                    </Typography>
+                </Grid>
+                <Grid element
+                sx={{marginY:'20px'}}
+                >
+                    <Typography paragraph
+                    sx={{color:'text.text1', borderTop:'solid 1px', borderColor:'primary.dark'}}  align={'center'}
+                    >
                         CelestialNotes - сервис облачного хранения Ваших заметок.
-                        <div style={{marginTop:'5px'}}>Наши контакты:
-                            https://github.com/ Eaglise/ST_KR__Cloud_Notes
-                        </div>
-                    </div>
-                </div>
+                        Наши контакты:
+{/*https://github.com/Eaglise/ST_KR__Cloud_Notes*/}
+                    </Typography>
+                </Grid>
+
+            </Grid>
+        </Grid>
 
 
     )
