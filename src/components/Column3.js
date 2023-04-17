@@ -9,29 +9,30 @@ import {exit, getUser, refreshUser} from "../store/UserSlice";
 
 
 function Column3() {
-    // const notes=[
-    //     {title:'Название', date:'13.01.2023 10:48', content:'_текст_'},
-    // ]
+    const notes=[
+        {title:'Название1', date:'13.01.2023 10:48', content:'_текст_1', user:'daradanci'},
+        {title:'Название2', date:'13.01.2023 10:48', content:'_текст_2', user:'daradanci'},
+    ]
     const dispatch = useDispatch();
-    const {notes} = useSelector((state) => state.notes);
+    // const {notes} = useSelector((state) => state.notes);
     const {userId} = useSelector((state) => state.userId);
     const {username} = useSelector((state) => state.username);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await dispatch(getUser())
-                .catch(async(error)=>{
-                    await dispatch(refreshUser())
-                        .then(async()=>{
-                            await dispatch(getUserNotes(userId))
-                        })
-                })
-                .then(async()=>{
-                    await dispatch(getUserNotes(userId))
-                })
-        }
-        fetchData()
-    }, [])
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         await dispatch(getUser())
+    //             .catch(async(error)=>{
+    //                 await dispatch(refreshUser())
+    //                     .then(async()=>{
+    //                         await dispatch(getUserNotes(userId))
+    //                     })
+    //             })
+    //             .then(async()=>{
+    //                 await dispatch(getUserNotes(userId))
+    //             })
+    //     }
+    //     fetchData()
+    // }, [])
 
     return(
 
