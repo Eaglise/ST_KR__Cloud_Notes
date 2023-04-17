@@ -1,37 +1,35 @@
 import MainTitle from "./MainTitle";
 import {Box, Button, Container, Grid, IconButton, TextField, Typography} from "@mui/material";
 import SaveAsSharpIcon from '@mui/icons-material/SaveAsSharp';
-const styles = {
+import {useDispatch, useSelector} from "react-redux";
+import {addNote, getUserNotes, setCurrentNote} from "../store/NoteSlice";
 
-  largeIcon: {
-    width: 60,
-    height: 60,
-  },
-
-};
 function Column2() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-            console.log({
-            title: data.get('title'),
-            note: data.get('note'),
-        });
-    };
+    const dispatch = useDispatch();
+    const {userId} = useSelector((state) => state.userId);
+    const {username} = useSelector((state) => state.username);
+    const {currentNote} = useSelector((state) => state.currentNote);
+    const {oldTitle} = useSelector((state) => state.oldTitle);
 
+    const handleUpdate=async (event)=>{
+        event.preventDefault();
+        if(oldTitle===""){
+            await dispatch(addNote(currentNote))
+                .then(async ()=>{
+                    await dispatch(getUserNotes())
+                })
+        }
+    }
     return(
         <Grid element
-              xs={6}
+              // xs={6}
+            width={'50vw'}
 
         >
         <MainTitle/>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, flexGrow: 1 }} >
+                <Box component="form"  noValidate sx={{ mt: 1, flexGrow: 1 }} >
             <Grid container columns={1} direction="column" justifyContent="center"  alignItems="center" width={'100%'}
 >
-                <Grid element>
-
-
-                </Grid>
                 <Grid element sx={{ width:'100%'}}>
                     <Box sx={{ display: 'flex', flexDirection: 'row',
                      justifyContent: 'flex-start',
@@ -39,7 +37,7 @@ function Column2() {
                         // border:'2px solid pink',
                     }}>
 
-                        <IconButton sx={{marginLeft:'25%'}}>
+                        <IconButton sx={{marginLeft:'25%'}} type={'submit'}>
                             <SaveAsSharpIcon sx={{
                                 color:'secondary.button', fontSize:'200%',
                             ":hover":{
@@ -49,9 +47,9 @@ function Column2() {
                         </IconButton>
 
                         <TextField
-                          id="note_title"
+                          id="title"
                           label="Название заметки"
-                          multiline
+                          // multiline
                           rows={1}
                           variant="filled"
                           sx={{
@@ -68,6 +66,12 @@ function Column2() {
                                 color: 'text.text2'
                           }
                           }}
+                          onChange={async(e)=>{
+                              e.preventDefault();
+                              let updatedCurrentNote=currentNote
+                              updatedCurrentNote['title']=e.target.value
+                              await dispatch(setCurrentNote(updatedCurrentNote))
+                          }}
                         />
                     </Box>
 
@@ -75,7 +79,7 @@ function Column2() {
                 <Grid element sx={{width:'100%', marginTop:'20px'}}>
 
                 <TextField
-                      id="filled-multiline-static"
+                      id="content"
                       label="Текст заметки"
                       multiline
                       rows={18}
@@ -92,7 +96,12 @@ function Column2() {
                             color: 'text.text2'
                       }
                       }}
-
+                      onChange={async(e)=>{
+                              e.preventDefault();
+                              let updatedCurrentNote=currentNote
+                              updatedCurrentNote['content']=e.target.value
+                              await dispatch(setCurrentNote(updatedCurrentNote))
+                          }}
 
 
                 />

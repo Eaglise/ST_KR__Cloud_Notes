@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {
     Box,
@@ -15,21 +15,54 @@ import {
 } from "@mui/material";
 import {Label} from "@mui/icons-material";
 import MainTitle from "../components/MainTitle";
+import {addUser, authUser, closeAlert, openAlert} from "../store/UserSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {ErrorStatus, LoadingStatus, SuccessStatus} from "../store/pref";
+import AlertDialog from "../components/AlertDialog";
 
 function LoginPage() {
-    const navigate = useNavigate();
-    function handleClick() {
-        navigate('/notes');
-    }
-    const handleSubmit = (event) => {
+    const [alertMessage, setAlertMessage] = useState({});
+    const dispatch = useDispatch();
+    const { userStatus} = useSelector((state) => state.userStatus);
+    const { userError} = useSelector((state) => state.userError);
+
+
+    const handleSubmit = async(event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
             console.log({
             login: data.get('login'),
             password: data.get('password'),
         });
+        await dispatch(authUser({
+               username:data.get('username'),
+               password:data.get('password'),
+           }))
     };
 
+    useEffect(() => {
+        const alerting = async() => {
+            switch (userStatus){
+                case ErrorStatus:
+                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError})
+                    await dispatch(openAlert());
+                    break;
+                case SuccessStatus:
+                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Вы успешно вошли.'})
+                    await dispatch(openAlert());
+                    break;
+                case LoadingStatus:
+                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:''})
+                    await dispatch(openAlert());
+                    break;
+                default:
+                    setAlertMessage({type:'', title:'', text:''})
+                    await dispatch(closeAlert())
+                    break;
+            }
+        }
+        alerting()
+    },[userStatus])
     return(
     <>
         <MainTitle/>
@@ -124,6 +157,8 @@ function LoginPage() {
                             {"Нет аккаунта."}
                     </Link>
                 </Grid>
+                <AlertDialog {...alertMessage}/>
+
 
 
             </Box>

@@ -15,12 +15,13 @@ function MainPage() {
         <Grid
             container
             spacing={0}
-              maxWidth={'bg'}
+              // maxWidth={'100vw'}
               margin={'0px'}
               padding={'0px'}
               gap={'0px'}
             alignItems="stretch"
-            sx={{  height:'100vh',}}
+            width={'100vw'}
+            sx={{  height:'100vh', }}
 
 
 

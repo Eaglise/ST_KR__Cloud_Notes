@@ -1,39 +1,47 @@
 import Note from "./Note";
 import {Button, Container, CssBaseline, Grid} from "@mui/material";
 import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {getUserNotes} from "../store/NoteSlice";
+import {exit, getUser, refreshUser} from "../store/UserSlice";
 
 
 
 
 function Column3() {
-    const notes=[
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
-        {title:'Название', date:'13.01.2023 10:48', text:'_текст_'},
+    // const notes=[
+    //     {title:'Название', date:'13.01.2023 10:48', content:'_текст_'},
+    // ]
+    const dispatch = useDispatch();
+    const {notes} = useSelector((state) => state.notes);
+    const {userId} = useSelector((state) => state.userId);
+    const {username} = useSelector((state) => state.username);
 
-
-    ]
+    useEffect(() => {
+        const fetchData = async () => {
+            await dispatch(getUser())
+                .catch(async(error)=>{
+                    await dispatch(refreshUser())
+                        .then(async()=>{
+                            await dispatch(getUserNotes(userId))
+                        })
+                })
+                .then(async()=>{
+                    await dispatch(getUserNotes(userId))
+                })
+        }
+        fetchData()
+    }, [])
 
     return(
 
         <Grid element
-              xs={3}
+              // xs={3}
         sx={{backgroundColor:'secondary.semitransparent1'}}
+              width={'25vw'}
         >
-            <Grid container columns={1} rowSpacing={0}>
+            <Grid container columns={1} rowSpacing={0}
+>
 
             <Button variant={"contained"}
             sx={{backgroundColor:'button.add.main', color:'button.add.text', border:'1px solid', borderColor:'button.add.text',
@@ -61,10 +69,7 @@ function Column3() {
                     }
 
             }}
-
             >
-
-
                 {notes.map((item, index) => {
                             return (
                                 <Grid element sx={{width:"100%"}}>
@@ -72,9 +77,6 @@ function Column3() {
                                 </Grid>
                             )
                         })}
-
-
-
             </Grid>
 
 

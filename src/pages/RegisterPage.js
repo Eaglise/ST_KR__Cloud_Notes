@@ -13,21 +13,62 @@ import {
 
 } from "@mui/material";
 import MainTitle from "../components/MainTitle";
+import {useEffect, useState} from "react";
+import {useSelector, useDispatch} from "react-redux";
+import {addUser, closeAlert, openAlert} from "../store/UserSlice";
+import {ErrorStatus, LoadingStatus, SuccessStatus} from "../store/pref";
+import AlertDialog from "../components/AlertDialog";
+
 
 function RegisterPage() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [alertMessage, setAlertMessage] = useState({});
+    const { userStatus} = useSelector((state) => state.userStatus);
+    const { userError} = useSelector((state) => state.userError);
     function handleClick() {
         navigate('/notes');
     }
-    const handleSubmit = (event) => {
+    const handleSubmit =async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
             console.log({
-            login: data.get('login'),
+            username: data.get('username'),
             password: data.get('password'),
             password2: data.get('password2'),
         });
+            if (data.get('password')===data.get('password2')){
+                await dispatch(addUser({
+                       username:data.get('username'),
+                       password:data.get('password'),
+                   }))
+            }
     };
+
+    useEffect(() => {
+        const alerting = async() => {
+            switch (userStatus){
+                case ErrorStatus:
+                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError})
+                    await dispatch(openAlert());
+                    break;
+                case SuccessStatus:
+                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Аккаунт успешно создан.'})
+                    await dispatch(openAlert());
+                    break;
+                case LoadingStatus:
+                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:''})
+                    await dispatch(openAlert());
+                    break;
+                default:
+                    setAlertMessage({type:'', title:'', text:''})
+                    await dispatch(closeAlert())
+                    break;
+            }
+        }
+        alerting()
+    },[userStatus])
+
 
     return(
         <>
@@ -66,10 +107,10 @@ function RegisterPage() {
                 <TextField
                     required
                     fullWidth
-                    id="login"
+                    id="username"
                     // label="Логин"
-                    name="login"
-                    autoComplete="login"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
                     sx={{backgroundColor:'white',
                         // padding:'4px',
@@ -133,18 +174,10 @@ function RegisterPage() {
                 >
                     Регистрация
                 </Button>
-
-
-
+                    <AlertDialog {...alertMessage}/>
                 </Grid>
-
-
             </Box>
-
-
-
         </Box>
-
         </Container>
         </>
     )
