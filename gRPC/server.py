@@ -14,60 +14,90 @@ class MinioServicer(minio_pb2_grpc.MinioMethodsServicer):
             self.minio = MinioClass()
         except ConnectionError:
             print('Minio connection failed')
-        except Exception:
-            print('Unknown error')
+        except Exception as e:
+            print('Unknown error ', e)
         else:
             print('Minio connection succeed')
 
     def GetList(self, request, context):
         print('New request: Get List')
-        note_list = []
-        note = self.minio.get_note(request.user, 'title1')
-        note_pb = minio_pb2.NoteResponse(user=request.user, title='title1', content=note, date='date')
-        note_list.append(note_pb)
-        for n in note_list:
-            yield n
+
+        try:
+            note_list = self.minio.get_notes(request.user)
+
+            for note in note_list:
+                print(note)
+                yield minio_pb2.NoteResponse(user=note['user'], title=note['title'], content=note['content'], date=note['date'])
+
+        except Exception as e:
+            print(e)
+
 
     def AddNote(self, request, context):
         print('New request: Add Note')
         try:
             self.minio.add_note(request.user, request.title, request.content)
         except ValueError:
-            status = minio_pb2.Status(status=False, error_message='Minio note add failed')
+            status = minio_pb2.Status(status=False, status_code=400)
         except ConnectionError:
-            status = minio_pb2.Status(status=False, error_message='Unknown minio error')
+            status = minio_pb2.Status(status=False, status_code=500)
         except Exception:
-            status = minio_pb2.Status(status=False, error_message='Unknown grpc error')
+            status = minio_pb2.Status(status=False, status_code=500)
         else:
-            status = minio_pb2.Status(status=True)
+            status = minio_pb2.Status(status=True, status_code=200)
         return status
 
     def EditNote(self, request, context):
         print('New request: Edit Note')
-        return minio_pb2.Status(status='ok')
+        try:
+            if request.old_title is not None:
+                self.minio.delete_note(request.user, request.old_title)
+            self.minio.add_note(request.user, request.title, request.content)
+        except ValueError:
+            status = minio_pb2.Status(status=False, status_code=400)
+        except ConnectionError:
+            status = minio_pb2.Status(status=False, status_code=500)
+        except Exception:
+            status = minio_pb2.Status(status=False, status_code=500)
+        else:
+            status = minio_pb2.Status(status=True, status_code=200)
+        return status
 
     def DeleteNote(self, request, context):
         print('New request: Delete Note')
-        return minio_pb2.Status(status='ok')
+        try:
+            self.minio.delete_note(request.user, request.title)
+        except ValueError:
+            status = minio_pb2.Status(status=False, status_code=400)
+        except ConnectionError:
+            status = minio_pb2.Status(status=False, status_code=500)
+        except Exception:
+            status = minio_pb2.Status(status=False, status_code=500)
+        else:
+            status = minio_pb2.Status(status=True, status_code=200)
+        return status
 
     def AddUser(self, request, context):
         print('New request: Add User')
         try:
             self.minio.add_user(request.user)
         except ValueError:
-            status = minio_pb2.Status(status=False, error_message='Minio user add failed (Probably this username already taken)')
+            status = minio_pb2.Status(status=False, status_code=400)
         except ConnectionError:
-            status = minio_pb2.Status(status=False, error_message='Unknown minio error')
+            status = minio_pb2.Status(status=False, status_code=500)
         except Exception:
-            status = minio_pb2.Status(status=False, error_message='Unknown grpc error')
+            status = minio_pb2.Status(status=False, status_code=500)
         else:
-            status = minio_pb2.Status(status=True)
+            status = minio_pb2.Status(status=True, status_code=200)
         return status
 
     def GetDate(self, request, context):
         print('New request: Get Date')
-        return minio_pb2.NoteDate(date='some date')
-
+        try:
+            note_date = self.minio.get_date(request.user, request.title)
+            return minio_pb2.NoteDate(date=note_date)
+        except Exception as e:
+            print(e)
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))

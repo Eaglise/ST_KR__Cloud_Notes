@@ -26,6 +26,7 @@ def test_add_note(stub, note):
 
 def test_get_note(stub, user):
     note = stub.GetList(user)
+    print("notes got")
     for n in note:
         print(n.content)
 
@@ -40,8 +41,8 @@ def run():
         test_grpc(stub, minio_pb2.NoteTitle(user='user1', title='title1'))
         # print("-------------- AddUser --------------")
         # test_add_user(stub, minio_pb2.User(user='user2'))
-        # print("-------------- AddNote --------------")
-        # test_add_note(stub, minio_pb2.NoteRequest(user='user1', title='title1', content='content1'))
+        print("-------------- AddNote --------------")
+        test_add_note(stub, minio_pb2.NoteRequest(user='user1', title='title2', content='content2'))
         print("-------------- GetNote --------------")
         test_get_note(stub, minio_pb2.User(user='user1'))
         channel.close()
