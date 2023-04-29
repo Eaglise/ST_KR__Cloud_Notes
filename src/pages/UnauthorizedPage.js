@@ -10,7 +10,7 @@ function UnauthorizedPage() {
         <>
             <MainTitle/>
         <Container maxWidth={'sm'}
-        sx={{backgroundColor:'secondary.semitransparent', marginTop:4, paddingY: '40px', width:'400px', borderRadius: '20px'}}
+        sx={{backgroundColor:'secondary.semitransparent', marginTop:4, paddingY: '40px', width:'400px', borderRadius: '20px',}}
         >
 
             <Grid

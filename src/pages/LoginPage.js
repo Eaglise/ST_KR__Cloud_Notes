@@ -31,7 +31,7 @@ function LoginPage() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
             console.log({
-            login: data.get('login'),
+            username: data.get('username'),
             password: data.get('password'),
         });
         await dispatch(authUser({
@@ -101,10 +101,10 @@ function LoginPage() {
                     margin="normal"
                     required
                     fullWidth
-                    id="login"
+                    id="username"
                     // label="Логин"
-                    name="login"
-                    autoComplete="login"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
                     sx={{backgroundColor:'white',
                         // padding:'4px',

@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
-import {IP4, LoadingStatus, SuccessStatus, ErrorStatus} from "./pref";
+import {ErrorStatus, IP4, LoadingStatus, SuccessStatus} from "./pref";
 
 export const addUser = createAsyncThunk(
     'users/addUser',
@@ -22,28 +22,39 @@ export const addUser = createAsyncThunk(
 export const authUser = createAsyncThunk(
     'users/authUser',
     async (user) => {
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: user.username,
-                password: user.password,
-            })
-        };
-        const response = await axios.post(`${IP4}api/token/obtain`, requestOptions);
-        return response.data
+        return await fetch(
+            `${IP4}api/token/obtain`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    username: user.username,
+                    password: user.password,
+                })
+            }
+        )
+            .then(
+                (data) => data.json()
+            )
     }
 )
 export const refreshUser = createAsyncThunk(
     'users/refreshUser',
     async () => {
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                refresh: localStorage.getItem('refreshToken'),
-            })
-        };
-        const response = await axios.post(`${IP4}api/token/refresh`, requestOptions);
-        return response.data
+        return await fetch(
+        `${IP4}api/token/refresh`,
+        {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    refresh: localStorage.getItem('refreshToken'),
+                })
+            }
+        ).then((data) => data.json())
     }
 )
 
@@ -51,8 +62,10 @@ export const getUser = createAsyncThunk(
     'users/getUser',
     async () => {
         const requestOptions = {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            }
         };
         const response = await axios.get(`${IP4}api/user`, requestOptions);
         return response.data
@@ -81,8 +94,9 @@ export const userSlice = createSlice({
             localStorage.setItem('accessToken', '')
             state.refreshToken="";
             localStorage.setItem('refreshToken', '')
-
-
+            state.userStatus=""
+            state.userError=""
+            state.alertOpen=false
         },
         updateUsername: (state, action) => {
             state.username = action.payload;
@@ -148,9 +162,10 @@ export const userSlice = createSlice({
                 state.userStatus=LoadingStatus
             })
             .addCase(getUser.fulfilled, (state, action) => {
-                state.userId=action.payload['id']
-                state.username=action.payload['username']
+                state.userId=action.payload.data.id
+                state.username=action.payload.data.username
                 state.userStatus = SuccessStatus
+                console.log(action.payload.data.id)
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.userStatus = ErrorStatus

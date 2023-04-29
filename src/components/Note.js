@@ -14,7 +14,7 @@ function Note(item) {
 
     const clickHandler=async ()=>{
         await dispatch(setOldTitle(item.title))
-        await dispatch(setCurrentNote(item))
+        await dispatch(setCurrentNote({title:item.title, content:item.content, date:item.date}))
     }
     useEffect(() => {
         const updateColor = async () => {
@@ -28,7 +28,7 @@ function Note(item) {
         updateColor()
     }, [oldTitle])
     const deleteHandler=async ()=>{
-        await dispatch(deleteNote(item))
+        await dispatch(deleteNote({user:username, title:item.title}))
             .then(async()=>{
                 await dispatch(getUserNotes(userId))
             })
@@ -39,7 +39,7 @@ function Note(item) {
             <Paper elevation={2} onClick={async()=>{clickHandler()}}
                    sx={{width:'80%', borderRadius:'1px', borderBottom:'1px solid',
                 borderLeft:'1px solid', borderColor:'secondary.main',
-                backgroundColor:color}
+                backgroundColor:color, cursor: 'pointer'}
 
             }>
                 <Typography sx={{fontSize:'10px', marginTop:'10px', marginLeft:'20px', color:'button.add.main'}}>

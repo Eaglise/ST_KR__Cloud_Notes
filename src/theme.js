@@ -65,7 +65,7 @@ const theme=createTheme({
                 `@font-face {
                   font-family: NunitoSansBoldFont;
                   src: url('images/Nunito_Sans/NunitoSans-Bold.ttf');
-                }`
+                }`,
             ]
         }
     },
@@ -77,18 +77,11 @@ const theme=createTheme({
                 body: {
                     // border: '2px solid blue',
                     backgroundImage: `url("${BackgroundImage}")`,
+
                 },
-                "*::-webkit-scrollbar": {
-                    width: "5px"
-                },
-                "*::-webkit-scrollbar-track": {
-                    background: "#110A23"
-                },
-                "*::-webkit-scrollbar-thumb": {
-                    background: "#330F0D",
-                    borderRadius: "2px"
-                }
+
             },
+
 
         },
 

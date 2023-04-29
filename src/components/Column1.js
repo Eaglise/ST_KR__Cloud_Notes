@@ -1,14 +1,19 @@
 import {Button, Container, Grid, Typography} from "@mui/material";
 import {exit} from "../store/UserSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {clearNotes} from "../store/NoteSlice";
 
 
 function Column1() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const {username} = useSelector((state) => state.username);
+    const {notes} = useSelector((state) => state.notes);
+
     const quit=async()=>{
         await dispatch(exit())
+        await dispatch(clearNotes())
         navigate('/');
     }
     return(
@@ -33,33 +38,30 @@ function Column1() {
                             Выйти
                     </Button>
                 </Grid>
+
+
                 <Grid element
                 sx={{marginY:'20px'}}
                 >
                     <Typography paragraph
-                    sx={{color:'text.text1'}}  align={'center'}
+                    sx={{color:'text.text1', marginY:'20px'}}  align={'center'}
                     >
-                        Здравствуйте, _InsertUserName_!
+                        Здравствуйте, {username}!
                     </Typography>
-                </Grid>
-                <Grid element
-                sx={{marginY:'20px'}}
-                >
                     <Typography paragraph
-                    sx={{color:'text.text1'}}  align={'center'}
+                    sx={{color:'text.text1', marginY:'20px'}}  align={'center'}
                     >
-                        У Вас N заметок.
+                        У Вас {notes.length} заметок
                     </Typography>
-                </Grid>
-                <Grid element
-                sx={{marginY:'20px'}}
-                >
                     <Typography paragraph
                     sx={{color:'text.text1', borderTop:'solid 1px', borderColor:'primary.dark'}}  align={'center'}
                     >
                         CelestialNotes - сервис облачного хранения Ваших заметок.
+                    </Typography>
+                    <Typography paragraph
+                    sx={{color:'text.text1', borderTop:'solid 1px', borderColor:'primary.dark'}}  align={'center'}
+                    >
                         Наши контакты:
-{/*https://github.com/Eaglise/ST_KR__Cloud_Notes*/}
                     </Typography>
                 </Grid>
 

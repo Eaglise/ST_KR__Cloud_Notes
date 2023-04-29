@@ -10,79 +10,104 @@ export const getUserNotes = createAsyncThunk(
             headers: { 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             },
-
         };
         const response = await axios.get(`${IP4}notes/${userId}`, requestOptions);
-        return response.data
+        return response.data.data
     }
 )
+
 
 export const addNote = createAsyncThunk(
     'notes/addNote',
     async (note) => {
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-            body: JSON.stringify({
-                user: note.username,
-                title: note.title,
-                content: note.content
-            })
-
-        };
-        const response = await axios.post(`${IP4}notes`, requestOptions);
-        return response.data
+        return await fetch(
+            `${IP4}notes`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+                body: JSON.stringify({
+                    user: note.user,
+                    title: note.title,
+                    content: note.content
+                })
+            }
+        )
+            .then(
+                (data) => data.json()
+            )
     }
 )
+
+
 
 export const editNote = createAsyncThunk(
     'notes/editNote',
     async (note) => {
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-            body: JSON.stringify({
-                user: note.username,
-                title: note.title,
-                content: note.content,
-                old_title: note.old_title,
-            })
-
-        };
-        const response = await axios.put(`${IP4}notes/edit`, requestOptions);
-        return response.data
+        return await fetch(
+            `${IP4}notes/edit`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+                body: JSON.stringify({
+                    user: note.user,
+                    title: note.title,
+                    content: note.content,
+                    old_title: note.old_title,
+                    date:note.date,
+                })
+            }
+        )
+            .then(
+                (data) => data.json()
+            )
     }
 )
+
 
 export const deleteNote = createAsyncThunk(
     'notes/deleteNote',
     async (note) => {
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-            body: JSON.stringify({
-                user: note.username,
-                title: note.title,
-            })
-
-        };
-        const response = await axios.put(`${IP4}notes/delete`, requestOptions);
-        return response.data
+        return await fetch(
+            `${IP4}notes/delete`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+                body: JSON.stringify({
+                    user: note.user,
+                    title: note.title,
+                })
+            }
+        )
+            .then(
+                (data) => data.json()
+            )
     }
 )
-
 export const noteSlice = createSlice({
     name: "noteSlice",
     initialState: {
         notes:[],
         noteStatus:'',
-        currentNote:{},
+        currentNote:{title:'', content:'', date:''},
         oldTitle:'',
     },
     reducers: {
+        clearNotes: (state, action) => {
+            state.notes=[]
+            state.noteStatus=''
+            state.currentNote={title:'', content:'', date:''}
+            state.oldTitle=''
+
+        },
         setCurrentNote: (state, action) => {
             state.currentNote = action.payload;
         },
@@ -99,6 +124,9 @@ export const noteSlice = createSlice({
             .addCase(getUserNotes.fulfilled, (state, action) => {
                 state.noteStatus = SuccessStatus
                 state.notes=action.payload
+                state.currentNote=state.notes[0]
+                state.oldTitle=state.notes[0]["title"]
+                console.log(state.currentNote["title"])
             })
             .addCase(getUserNotes.rejected, (state, action) => {
                 state.noteStatus=LoadingStatus
@@ -136,5 +164,5 @@ export const noteSlice = createSlice({
 
 })
 
-export const {setCurrentNote,setOldTitle }=noteSlice.actions;
+export const {clearNotes,setCurrentNote,setOldTitle }=noteSlice.actions;
 export default noteSlice.reducer;

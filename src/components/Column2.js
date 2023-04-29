@@ -2,8 +2,9 @@ import MainTitle from "./MainTitle";
 import {Box, Button, Container, Grid, IconButton, TextField, Typography} from "@mui/material";
 import SaveAsSharpIcon from '@mui/icons-material/SaveAsSharp';
 import {useDispatch, useSelector} from "react-redux";
-import {addNote, editNote, getUserNotes, setCurrentNote} from "../store/NoteSlice";
+import {addNote, editNote, getUserNotes, setCurrentNote, setOldTitle} from "../store/NoteSlice";
 import {useEffect, useState} from "react";
+import {getUser} from "../store/UserSlice";
 
 function Column2() {
     const dispatch = useDispatch();
@@ -11,44 +12,34 @@ function Column2() {
     const {username} = useSelector((state) => state.username);
     const {currentNote} = useSelector((state) => state.currentNote);
     const {oldTitle} = useSelector((state) => state.oldTitle);
-    const [formTitle, setFormTitle] = useState('');
-    const [formContent, setFormContent] = useState('');
+    const {notes} = useSelector((state) => state.notes);
+    const [formTitle, setFormTitle] = useState(currentNote.title);
+    const [formContent, setFormContent] = useState(currentNote.content);
 
     const handleUpdate=async (event)=>{
-        event.preventDefault();
-        let updatedCurrentNote=currentNote
-        updatedCurrentNote['title']=formTitle
-        updatedCurrentNote['content']=formContent
-        await dispatch(setCurrentNote(updatedCurrentNote))
-            .then(async()=>{
-                if(oldTitle===""){
-                    await dispatch(addNote(currentNote))
-                        .then(async ()=>{
-                            await dispatch(getUserNotes())
-                        })
-                }
-                else{
-                    await dispatch(editNote(currentNote))
-                    .then(async ()=>{
-                            await dispatch(getUserNotes())
-                        })
-                }
-            })
-    }
-    const handleCreate=async (event)=>{
-        event.preventDefault();
-        let updatedCurrentNote=currentNote
-        updatedCurrentNote['title']='NoName'
-        updatedCurrentNote['content']=''
+        // event.preventDefault();
 
-        await dispatch(setCurrentNote(updatedCurrentNote))
-            .then(async()=>{
-                    await dispatch(addNote(currentNote))
-                        .then(async ()=>{
-                            await dispatch(getUserNotes())
-                        })
+        // updatedCurrentNote['title']=formTitle
+        // updatedCurrentNote['content']=formContent
+        let updatedCurrentNote={title:formTitle, content:formContent, date:currentNote.date, user:username, old_title:oldTitle}
+        console.log(updatedCurrentNote)
+        
+            await dispatch(editNote(updatedCurrentNote))
+            .then(async ()=>{
+                    await dispatch(getUserNotes(userId))
             })
+            // .then(async()=>{
+            //     await dispatch(setOldTitle(notes[0].title))
+            //     await dispatch(setCurrentNote(notes[0]))
+            // })
+            // .then(async()=>{
+            //     console.log(currentNote)
+            //     setFormTitle(currentNote.title)
+            //     setFormContent(currentNote.content)
+            // })
+
     }
+
     useEffect(() => {
         const updateFormValues = async () => {
             setFormTitle(currentNote.title)
@@ -103,7 +94,7 @@ function Column2() {
                           },
                           "& .MuiFormLabel-root.Mui-focused": {
                                 color: 'text.text2'
-                          }
+                          },
                           }}
                           onChange={async(e)=>{
                               e.preventDefault();
