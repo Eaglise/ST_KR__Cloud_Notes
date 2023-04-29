@@ -26,7 +26,7 @@ function Note(item) {
             }
         }
         updateColor()
-    }, [oldTitle])
+    }, [currentNote])
     const deleteHandler=async ()=>{
         await dispatch(deleteNote({user:username, title:item.title}))
             .then(async()=>{
@@ -45,8 +45,21 @@ function Note(item) {
                 <Typography sx={{fontSize:'10px', marginTop:'10px', marginLeft:'20px', color:'button.add.main'}}>
                     {item.date}
                 </Typography>
-                <Typography sx={{marginLeft:'10px', color:'text.text1'}}>
-                    {item.title}
+
+                <Typography sx={{marginLeft:'10px', color:'text.text1',
+                    // textOverflow: 'ellipsis',
+                    // overflow: 'hidden ',
+                    // width:'100px'
+                }}
+
+                >
+                    {item.title.length>10 ?
+                        item.title
+                        :
+                        item.title
+
+
+                    }
                 </Typography>
             </Paper>
             <Button variant={"contained"} onClick={async()=>{deleteHandler()}}

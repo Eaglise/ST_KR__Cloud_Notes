@@ -4,7 +4,7 @@ import SaveAsSharpIcon from '@mui/icons-material/SaveAsSharp';
 import {useDispatch, useSelector} from "react-redux";
 import {addNote, editNote, getUserNotes, setCurrentNote, setOldTitle} from "../store/NoteSlice";
 import {useEffect, useState} from "react";
-import {getUser} from "../store/UserSlice";
+import {getUser, refreshUser} from "../store/UserSlice";
 
 function Column2() {
     const dispatch = useDispatch();
@@ -17,27 +17,15 @@ function Column2() {
     const [formContent, setFormContent] = useState(currentNote.content);
 
     const handleUpdate=async (event)=>{
-        // event.preventDefault();
-
-        // updatedCurrentNote['title']=formTitle
-        // updatedCurrentNote['content']=formContent
         let updatedCurrentNote={title:formTitle, content:formContent, date:currentNote.date, user:username, old_title:oldTitle}
         console.log(updatedCurrentNote)
-        
-            await dispatch(editNote(updatedCurrentNote))
-            .then(async ()=>{
-                    await dispatch(getUserNotes(userId))
-            })
-            // .then(async()=>{
-            //     await dispatch(setOldTitle(notes[0].title))
-            //     await dispatch(setCurrentNote(notes[0]))
-            // })
-            // .then(async()=>{
-            //     console.log(currentNote)
-            //     setFormTitle(currentNote.title)
-            //     setFormContent(currentNote.content)
-            // })
-
+            await dispatch(refreshUser())
+                .then(async()=>{
+                    await dispatch(editNote(updatedCurrentNote))
+                        .then(async ()=>{
+                                await dispatch(getUserNotes(userId))
+                        })
+                })
     }
 
     useEffect(() => {

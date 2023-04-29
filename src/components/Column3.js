@@ -9,8 +9,8 @@ import {exit, getUser, refreshUser} from "../store/UserSlice";
 
 
 function Column3() {
-    // const notes=[
-    //     {title:'Название1', date:'13.01.2023 10:48', content:'_текст_1', user:'daradanci'},
+    // const _notes=[
+    //     {title:'Названиеaaaaa aaaaaa aaaaaaa aaaaaaa1', date:'13.01.2023 10:48', content:'_текст_1', user:'daradanci'},
     //     {title:'Название2', date:'13.01.2023 10:48', content:'_текст_2', user:'daradanci'},
     // ]
     const dispatch = useDispatch();
@@ -21,31 +21,29 @@ function Column3() {
     const {oldTitle} = useSelector((state) => state.oldTitle);
     useEffect(() => {
         const fetchData = async () => {
-                await dispatch(getUser())
-                .then(async(res)=>{
-                    await dispatch(getUserNotes(res.payload.data.id))
-                    // .then(()=>{
-                    //     // await dispatch(setCurrentNote(notes[0]))
-                    //     console.log(notes[0])
-                    // })
+            await dispatch(refreshUser())
+                .then(async ()=>{
+                    await dispatch(getUser())
+                    .then(async(res)=>{
+                        await dispatch(getUserNotes(res.payload.data.id))
+                    })
                 })
 
         }
         fetchData()
     }, [])
     const handleAdd=async (event)=>{
-        // event.preventDefault();
         let updatedCurrentNote={title:`new_note`, content:'', date:'', user:username}
 
-        // await dispatch(setCurrentNote(updatedCurrentNote))
-        //     .then(async()=>{
-                    await dispatch(addNote(updatedCurrentNote))
-                        .then(async ()=>{
-                            await dispatch(getUserNotes(userId))
-                        })
-            // })
-        await dispatch(getUserNotes(userId))
-            .then((res)=>{console.log(res)})
+        await dispatch(refreshUser())
+            .then(async()=>{
+                await dispatch(addNote(updatedCurrentNote))
+                    .then(async ()=>{
+                        await dispatch(getUserNotes(userId))
+                    })
+                await dispatch(getUserNotes(userId))
+                    .then((res)=>{console.log(res)})
+            })
 
     }
     return(
