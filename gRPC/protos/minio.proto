@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package minio_proto;
+
+service MinioMethods {
+    rpc GetList(User) returns (stream NoteResponse) {}
+    rpc AddNote(NoteRequest) returns (Status) {}
+    rpc EditNote(NoteRequest) returns (Status) {}
+    rpc DeleteNote(NoteTitle) returns (Status) {}
+    rpc AddUser(User) returns (Status) {}
+    rpc GetDate(NoteTitle) returns (NoteDate) {}
+}
+
+message NoteRequest {
+    string user = 1;
+    string title = 2;
+    string content = 3;
+    optional string old_title = 4;
+}
+
+message NoteResponse {
+    string user = 1;
+    string title = 2;
+    string content = 3;
+    string date = 4;
+}
+
+message User {
+    string user = 1;
+}
+
+message Status {
+    bool status = 1;
+    int32 status_code = 2; // 200 ОК, 400 minio, 500 server dead :(
+}
+
+message NoteTitle {
+    string user = 1;
+    string title = 2;
+}
+
+message NoteDate {
+    string date = 1;
+}
