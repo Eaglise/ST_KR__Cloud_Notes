@@ -32,7 +32,6 @@ class MinioServicer(minio_pb2_grpc.MinioMethodsServicer):
         except Exception as e:
             print(e)
 
-
     def AddNote(self, request, context):
         print('New request: Add Note')
         try:

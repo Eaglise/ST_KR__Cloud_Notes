@@ -36,13 +36,12 @@ class MinioClass:
 
     def add_note(self, username: str, title: str, content=""):
         title = title.replace(" ", "_")
-        str_io_object = io.StringIO(content)
-        b_content = str_io_object.read().encode('utf8')
+        b_content = content.encode('utf-8')
         try:
             result = self.con.put_object(bucket_name=username,
                                          object_name=title,
                                          data=io.BytesIO(b_content),
-                                         length=len(content))
+                                         length=len(b_content))
         except S3Error as exc:
             print("error occurred: ", exc)
             raise ValueError
@@ -67,12 +66,14 @@ class MinioClass:
         try:
             note_list = self.con.list_objects(bucket_name=username)
             for note in note_list:
-                title = str(note.object_name).replace("_", " ")
-                note_date = str(note.last_modified)
+                title = str(note.object_name)
+                note_date = str(note.last_modified)[:19]
                 content = self.get_note_content(username, title)
+                title = title.replace("_", " ")
                 result = dict(user=username, title=title, content=content, date=note_date)
                 note_arr.append(result)
-            return note_arr
+            note_arr = sorted(note_arr, key=lambda n: n['date'])
+            return note_arr[::-1]
         except S3Error as exc:
             print("error occurred: ", exc)
             raise ValueError
@@ -96,7 +97,7 @@ class MinioClass:
         title = title.replace(" ", "_")
         try:
             stat = self.con.stat_object(bucket_name=username, object_name=title)
-            return str(stat.last_modified)
+            return str(stat.last_modified)[:19]
         except S3Error as exc:
             print("error occurred: ", exc)
             raise ValueError
