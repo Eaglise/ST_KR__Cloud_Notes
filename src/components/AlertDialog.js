@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
     Button,
     CircularProgress,
@@ -15,8 +15,21 @@ import {ErrorStatus, LoadingStatus, SuccessStatus} from "../store/pref";
 export default function AlertDialog(message) {
   const dispatch = useDispatch();
   const {alertOpen} = useSelector((state) => state.alertOpen);
+  const [path, setPath] = useState("/");
 
 
+  useEffect(() => {
+      const next_page = async() => {
+          if (message.mode==="logging"){
+              setPath("/notes")
+          }
+          if (message.mode==="registering"){
+              setPath("/log")
+          }
+      }
+
+      next_page()
+  },[])
   const handleClose = async() => {
       await dispatch(closeAlert())
       message.type=""
@@ -63,20 +76,30 @@ export default function AlertDialog(message) {
               </>
           }
           {message.type === SuccessStatus &&
-              <>
-                  <DialogContent>
-                      <DialogContentText id="alert-dialog-description">
-                          {message.text}
-                      </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                  <Button
-                  onClick={handleClose}
-                  color="primary" autoFocus>
-                  ок
-                  </Button>
-                  </DialogActions>
-              </>
+                  <>
+                      <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                              {message.text}
+                          </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                          { message.mode==="logging" &&
+                              <Button
+                          onClick={handleClose} href={"/notes"}
+                          color="primary" autoFocus>
+                          ок
+                          </Button>
+                          }
+                          { message.mode==="registering" &&
+                              <Button
+                          onClick={handleClose} href={"/login"}
+                          color="primary" autoFocus>
+                          ок
+                          </Button>
+                          }
+
+                      </DialogActions>
+                  </>
           }
       </Dialog>
     </div>

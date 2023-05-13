@@ -84,6 +84,7 @@ export const userSlice = createSlice({
         userStatus:"",
         userError:"",
         alertOpen:false,
+        deleteDialogOpen:false
     },
     reducers: {
         exit: (state, action) => {
@@ -97,6 +98,8 @@ export const userSlice = createSlice({
             state.userStatus=""
             state.userError=""
             state.alertOpen=false
+            state.deleteDialogOpen=false
+            localStorage.clear()
         },
         updateUsername: (state, action) => {
             state.username = action.payload;
@@ -116,6 +119,12 @@ export const userSlice = createSlice({
         closeAlert: (state, action) => {
             state.alertOpen = false;
         },
+        openDeleteDialog: (state, action) => {
+            state.deleteDialogOpen = true;
+        },
+        closeDeleteDialog: (state, action) => {
+            state.deleteDialogOpen = false;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -128,14 +137,11 @@ export const userSlice = createSlice({
             .addCase(addUser.rejected, (state, action) => {
                 state.userStatus = ErrorStatus
                 state.userError = action.error.message
-
-
             })
             .addCase(authUser.pending, (state, action) => {
                 state.userStatus=LoadingStatus
             })
             .addCase(authUser.fulfilled, (state, action) => {
-                // state.userStatus = SuccessMessage
                 state.accessToken=action.payload['access']
                 state.refreshToken=action.payload['refresh']
                 localStorage.setItem('accessToken', action.payload['access'])
@@ -166,10 +172,15 @@ export const userSlice = createSlice({
                 state.username=action.payload.data.username
                 state.userStatus = SuccessStatus
                 console.log(action.payload.data.id)
+                localStorage.setItem('userId',state.userId )
+                localStorage.setItem('username',state.username )
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.userStatus = ErrorStatus
                 state.userError = action.error.message
+                state.userId=localStorage.getItem('userId')
+                state.username=localStorage.getItem('username')
+
             })
 
 
@@ -178,6 +189,6 @@ export const userSlice = createSlice({
 })
 
 export const {exit, updateUsername, updatePassword, updateAccessToken, updateRefreshToken,
-    openAlert, closeAlert,
+    openAlert, closeAlert, openDeleteDialog, closeDeleteDialog,
 }=userSlice.actions;
 export default userSlice.reducer;

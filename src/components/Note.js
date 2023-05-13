@@ -1,7 +1,9 @@
 import {Button, Container, Grid, Box, Paper, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteNote, getUserNotes, setCurrentNote, setOldTitle} from "../store/NoteSlice";
+import {deleteNote, getUserNotes, setCurrentNote, setDeletingNote, setOldTitle} from "../store/NoteSlice";
+import {openDeleteDialog} from "../store/UserSlice";
+import DeleteDialog from "./DeleteDialog";
 
 
 function Note(item) {
@@ -28,10 +30,8 @@ function Note(item) {
         updateColor()
     }, [currentNote])
     const deleteHandler=async ()=>{
-        await dispatch(deleteNote({user:username, title:item.title}))
-            .then(async()=>{
-                await dispatch(getUserNotes(userId))
-            })
+        await dispatch(setDeletingNote({title:item.title, content:item.content, date:item.date}))
+        await dispatch(openDeleteDialog())
     }
     return(
 
@@ -74,7 +74,6 @@ function Note(item) {
                     >
                             X
             </Button>
-
         </Box>
     )
 }

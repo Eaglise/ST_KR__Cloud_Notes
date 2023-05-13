@@ -4,20 +4,21 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {addNote, editNote, getUserNotes, setCurrentNote} from "../store/NoteSlice";
 import {exit, getUser, refreshUser} from "../store/UserSlice";
+import DeleteDialog from "./DeleteDialog";
 
 
 
 
 function Column3() {
-    // const _notes=[
-    //     {title:'Названиеaaaaa aaaaaa aaaaaaa aaaaaaa1', date:'13.01.2023 10:48', content:'_текст_1', user:'daradanci'},
-    //     {title:'Название2', date:'13.01.2023 10:48', content:'_текст_2', user:'daradanci'},
-    // ]
+    const _notes=[
+        {title:'Названиеaaaaa aaaaaa aaaaaaa aaaaaaa1', date:'13.01.2023 10:48', content:'_текст_1', user:'daradanci'},
+        {title:'Название2', date:'13.01.2023 10:48', content:'_текст_2', user:'daradanci'},
+    ]
     const dispatch = useDispatch();
     const {notes} = useSelector((state) => state.notes);
     const {userId} = useSelector((state) => state.userId);
     const {username} = useSelector((state) => state.username);
-    const {currentNote} = useSelector((state) => state.currentNote);
+    const {deletingNote} = useSelector((state) => state.deletingNote);
     const {oldTitle} = useSelector((state) => state.oldTitle);
     useEffect(() => {
         const fetchData = async () => {
@@ -27,6 +28,10 @@ function Column3() {
                     .then(async(res)=>{
                         await dispatch(getUserNotes(res.payload.data.id))
                     })
+                    .catch(async (res)=>{
+                            await dispatch(getUserNotes(localStorage.getItem(userId)))
+                    })
+
                 })
 
         }
@@ -86,13 +91,15 @@ function Column3() {
             >
                 {notes.map((item, index) => {
                             return (
-                                <Grid element sx={{width:"100%"}}>
+                                <Grid element key={index} sx={{width:"100%"}} >
                                     <Note {...item}/>
                                 </Grid>
                             )
                         })}
             </Grid>
 
+
+            {/*<DeleteDialog {...deletingNote}/>*/}
 
         </Grid>
 

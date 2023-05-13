@@ -49,15 +49,15 @@ function RegisterPage() {
         const alerting = async() => {
             switch (userStatus){
                 case ErrorStatus:
-                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError})
+                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError, mode:'registering'})
                     await dispatch(openAlert());
                     break;
                 case SuccessStatus:
-                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Аккаунт успешно создан.'})
+                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Аккаунт успешно создан.', mode:'registering'})
                     await dispatch(openAlert());
                     break;
                 case LoadingStatus:
-                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:''})
+                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:'', mode:'registering'})
                     await dispatch(openAlert());
                     break;
                 default:

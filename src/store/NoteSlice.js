@@ -98,6 +98,7 @@ export const noteSlice = createSlice({
         notes:[],
         noteStatus:'',
         currentNote:{title:'', content:'', date:''},
+        deletingNote:{title:'', content:'', date:''},
         oldTitle:'',
     },
     reducers: {
@@ -105,11 +106,15 @@ export const noteSlice = createSlice({
             state.notes=[]
             state.noteStatus=''
             state.currentNote={title:'', content:'', date:''}
+            state.deletingNote={title:'', content:'', date:''}
             state.oldTitle=''
-
+            localStorage.clear()
         },
         setCurrentNote: (state, action) => {
             state.currentNote = action.payload;
+        },
+        setDeletingNote: (state, action) => {
+            state.deletingNote = action.payload;
         },
         setOldTitle: (state, action) => {
             state.oldTitle = action.payload;
@@ -126,10 +131,17 @@ export const noteSlice = createSlice({
                 state.notes=action.payload
                 state.currentNote=state.notes[0]
                 state.oldTitle=state.notes[0]["title"]
-                console.log(state.currentNote["title"])
+                // let _notes=[]
+                // for (let i=0; i<state.notes.length; i++){
+                //     // console.log(state.notes[i])
+                //     _notes.push((state.notes[i]))
+                // }
+                localStorage.setItem('notes',JSON.stringify(state.notes))
+
             })
             .addCase(getUserNotes.rejected, (state, action) => {
                 state.noteStatus=LoadingStatus
+                state.notes=JSON.parse(localStorage.getItem('notes'))
             })
             .addCase(addNote.pending, (state, action) => {
                 state.noteStatus=LoadingStatus
@@ -164,5 +176,5 @@ export const noteSlice = createSlice({
 
 })
 
-export const {clearNotes,setCurrentNote,setOldTitle }=noteSlice.actions;
+export const {clearNotes,setCurrentNote,setDeletingNote,setOldTitle}=noteSlice.actions;
 export default noteSlice.reducer;

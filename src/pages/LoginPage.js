@@ -44,15 +44,15 @@ function LoginPage() {
         const alerting = async() => {
             switch (userStatus){
                 case ErrorStatus:
-                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError})
+                    setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError, mode:'logging'})
                     await dispatch(openAlert());
                     break;
                 case SuccessStatus:
-                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Вы успешно вошли.'})
+                    setAlertMessage({type:SuccessStatus, title:'Готово!', text:'Вы успешно вошли.', mode:'logging'})
                     await dispatch(openAlert());
                     break;
                 case LoadingStatus:
-                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:''})
+                    setAlertMessage({type:LoadingStatus, title:'Загрузка', text:'', mode:'logging'})
                     await dispatch(openAlert());
                     break;
                 default:

@@ -12,11 +12,14 @@ export default configureStore({
         userStatus:userReducer,
         userError:userReducer,
         alertOpen:userReducer,
+        deleteDialogOpen:userReducer,
 
         notes:noteReducer,
         noteStatus:noteReducer,
         currentNote:noteReducer,
+        deletingNote:noteReducer,
         oldTitle:noteReducer,
+
     }
 
 
