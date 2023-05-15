@@ -143,21 +143,22 @@ def delete_note(request):
 @api_view(['POST'])
 def getJson(request):
     print("Запрос: ", request)
-    data = json.loads(request.data['body'])
-    print("Тело запроса: ", data)
+    # data = json.loads(str(request.data))
+    # data = json.loads(request.data['body'])
+    print("Тело запроса: ", request.data)
     try:
-        userobj = User.objects.get(username=data['username'])
+        userobj = User.objects.get(username=request.data['username'])
     except:
-        status = stub.AddUser(minio_pb2.User(user=data['username']))
+        status = stub.AddUser(minio_pb2.User(user=request.data['username']))
 
         # print(stub)
 
         if status.status:
-            user = User(username=data['username'])
-            user.set_password(data['password'])
+            user = User(username=request.data['username'])
+            user.set_password(request.data['password'])
             user.save()
             print('Новый пользователь:')
-            print(data['username'], data['password'])
+            print(request.data['username'], request.data['password'])
             print("Статус операции: ", status)
             return Response({
                 'status': status.status,
