@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import {Label} from "@mui/icons-material";
 import MainTitle from "../components/MainTitle";
-import {addUser, authUser, closeAlert, openAlert} from "../store/UserSlice";
+import {addUser, authUser, closeAlert, getUser, openAlert} from "../store/UserSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {ErrorStatus, LoadingStatus, SuccessStatus} from "../store/pref";
 import AlertDialog from "../components/AlertDialog";
@@ -37,7 +37,15 @@ function LoginPage() {
         await dispatch(authUser({
                username:data.get('username'),
                password:data.get('password'),
-           }))
+           })
+        )
+            .then(async(res)=>{
+                await dispatch(getUser())
+                // localStorage.setItem('userId',res.payload.data.id )
+                // console.log('RES')
+                // console.log(res)
+
+            })
     };
 
     useEffect(() => {

@@ -2,7 +2,7 @@
 // import {IP4} from "../src/store/pref"
 
 const CACHE = 'network-or-cache-v1';
-const timeout = 400;
+const timeout = 1000;
 
 
 // При установке воркера мы должны закешировать часть данных

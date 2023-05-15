@@ -2,6 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {IP4, LoadingStatus, SuccessStatus, ErrorStatus} from "./pref";
 
+async function fetchJSON(url, options) {
+    let response = await fetch(url, options);
+    if (!response.ok) {
+        throw new Error(`status code ${response.status}`);
+    }
+    return response.json();
+}
 
 export const getUserNotes = createAsyncThunk(
     'notes/getUserNotes',
@@ -20,7 +27,7 @@ export const getUserNotes = createAsyncThunk(
 export const addNote = createAsyncThunk(
     'notes/addNote',
     async (note) => {
-        return await fetch(
+        return await fetchJSON(
             `${IP4}notes`,
             {
                 method: 'POST',
@@ -35,9 +42,9 @@ export const addNote = createAsyncThunk(
                 })
             }
         )
-            .then(
-                (data) => data.json()
-            )
+            // .then(
+            //     (data) => data.json()
+            // )
     }
 )
 
@@ -46,7 +53,7 @@ export const addNote = createAsyncThunk(
 export const editNote = createAsyncThunk(
     'notes/editNote',
     async (note) => {
-        return await fetch(
+        return await fetchJSON(
             `${IP4}notes/edit`,
             {
                 method: 'PUT',
@@ -63,9 +70,9 @@ export const editNote = createAsyncThunk(
                 })
             }
         )
-            .then(
-                (data) => data.json()
-            )
+            // .then(
+            //     (data) => data.json()
+            // )
     }
 )
 
@@ -73,7 +80,7 @@ export const editNote = createAsyncThunk(
 export const deleteNote = createAsyncThunk(
     'notes/deleteNote',
     async (note) => {
-        return await fetch(
+        return await fetchJSON(
             `${IP4}notes/delete`,
             {
                 method: 'PUT',
@@ -87,9 +94,9 @@ export const deleteNote = createAsyncThunk(
                 })
             }
         )
-            .then(
-                (data) => data.json()
-            )
+            // .then(
+            //     (data) => data.json()
+            // )
     }
 )
 export const noteSlice = createSlice({
@@ -109,6 +116,9 @@ export const noteSlice = createSlice({
             state.deletingNote={title:'', content:'', date:''}
             state.oldTitle=''
             localStorage.clear()
+        },
+        setNotes: (state, action) => {
+            state.notes=action.payload
         },
         setCurrentNote: (state, action) => {
             state.currentNote = action.payload;
@@ -176,5 +186,5 @@ export const noteSlice = createSlice({
 
 })
 
-export const {clearNotes,setCurrentNote,setDeletingNote,setOldTitle}=noteSlice.actions;
+export const {clearNotes, setNotes,setCurrentNote,setDeletingNote,setOldTitle}=noteSlice.actions;
 export default noteSlice.reducer;

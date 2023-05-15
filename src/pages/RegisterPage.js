@@ -42,6 +42,10 @@ function RegisterPage() {
                        username:data.get('username'),
                        password:data.get('password'),
                    }))
+                    .catch(async(err)=>{
+                        setAlertMessage({type:ErrorStatus, title:'Ошибка', text:userError, mode:'registering'})
+                        await dispatch(openAlert());
+                    })
             }
     };
 

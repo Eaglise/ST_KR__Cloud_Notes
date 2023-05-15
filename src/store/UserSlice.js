@@ -2,7 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import {ErrorStatus, IP4, LoadingStatus, SuccessStatus} from "./pref";
 
-export const addUser = createAsyncThunk(
+export const addUser1 = createAsyncThunk(
     'users/addUser',
     async (newUser) => {
 
@@ -19,10 +19,43 @@ export const addUser = createAsyncThunk(
     }
 )
 
+async function fetchJSON(url, options) {
+    let response = await fetch(url, options);
+    if (!response.ok) {
+        throw new Error(`status code ${response.status}`);
+    }
+    return response.json();
+}
+
+export const addUser = createAsyncThunk(
+    'users/addUser',
+    async (newUser) => {
+        return await fetchJSON(
+            `${IP4}add_user`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify({
+                    username: newUser.username,
+                    password: newUser.password,
+                })
+            }
+        )
+            // .then(
+            //     (data) => data.json()
+            // )
+
+    }
+)
+
+
+
 export const authUser = createAsyncThunk(
     'users/authUser',
     async (user) => {
-        return await fetch(
+        return await fetchJSON(
             `${IP4}api/token/obtain`,
             {
                 method: 'POST',
@@ -35,15 +68,15 @@ export const authUser = createAsyncThunk(
                 })
             }
         )
-            .then(
-                (data) => data.json()
-            )
+            // .then(
+            //     (data) => data.json()
+            // )
     }
 )
 export const refreshUser = createAsyncThunk(
     'users/refreshUser',
     async () => {
-        return await fetch(
+        return await fetchJSON(
         `${IP4}api/token/refresh`,
         {
                 method: 'POST',
@@ -54,7 +87,8 @@ export const refreshUser = createAsyncThunk(
                     refresh: localStorage.getItem('refreshToken'),
                 })
             }
-        ).then((data) => data.json())
+        )
+            // .then((data) => data.json())
     }
 )
 
@@ -132,7 +166,7 @@ export const userSlice = createSlice({
                 state.userStatus=LoadingStatus
             })
             .addCase(addUser.fulfilled, (state, action) => {
-                state.userStatus = SuccessStatus
+                    state.userStatus = SuccessStatus
             })
             .addCase(addUser.rejected, (state, action) => {
                 state.userStatus = ErrorStatus

@@ -2,8 +2,8 @@ import Note from "./Note";
 import {Button, Container, CssBaseline, Grid} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addNote, editNote, getUserNotes, setCurrentNote} from "../store/NoteSlice";
-import {exit, getUser, refreshUser} from "../store/UserSlice";
+import {addNote, editNote, getUserNotes, setCurrentNote, setNotes} from "../store/NoteSlice";
+import {exit, getUser, refreshUser, updateUsername} from "../store/UserSlice";
 import DeleteDialog from "./DeleteDialog";
 
 
@@ -22,16 +22,33 @@ function Column3() {
     const {oldTitle} = useSelector((state) => state.oldTitle);
     useEffect(() => {
         const fetchData = async () => {
+            // await dispatch(updateUsername(()=>{
+            //     if(localStorage.getItem('username')) {
+            //         return localStorage.getItem('username')
+            //     } else return ""
+            // }))
+            // await dispatch(setNotes(()=>{
+            //     if(localStorage.getItem('notes')){
+            //         return JSON.parse(localStorage.getItem('notes'))
+            //     } else return []
+            // }))
             await dispatch(refreshUser())
                 .then(async ()=>{
                     await dispatch(getUser())
                     .then(async(res)=>{
-                        await dispatch(getUserNotes(res.payload.data.id))
+                        await dispatch(getUserNotes(localStorage.getItem('userId')))
+                            // .then(async(res)=>{
+                            //     if(notes===[]){
+                            //     }
+                            // })
+                    //    res.payload.data.id
                     })
-                    .catch(async (res)=>{
-                            await dispatch(getUserNotes(localStorage.getItem(userId)))
-                    })
-
+                    // .catch(async (err)=>{
+                    //     if (localStorage.getItem(userId)!==null){
+                    //         await dispatch(getUserNotes(localStorage.getItem(userId)))
+                    //
+                    //     }
+                    // })
                 })
 
         }
